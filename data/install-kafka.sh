@@ -30,18 +30,18 @@ wget -nv "${KAFKA_MD5_DOWNLOAD_URL}"
 # *******************************************
 # !!! MD5 SUM FAILS BECAUSE OF FORMATTING!!!!
 # *******************************************
- 
+
 # the md5 sum according to elastic.co: 
-# SUM=$(cat "${KAFKA_FILE}.md5")
+SUM=`cat "${KAFKA_FILE}.md5" | tr -d '\n' | awk '{ line = sprintf("%s", $0); gsub(/[[:space:]]/, "", line); split(line, parts, ":"); print tolower(parts[2]) }'`
 
 # the md5 sum we calculate
-# NEWSUM=$(md5sum "$KAFKA_FILE")
+NEWSUM=`md5sum "${KAFKA_FILE}" | awk '{print $1}'`
 
-# if [ "$SUM" == "$NEWSUM" ] && [ "$SUM" != "" ] 
-# then echo "MD5 SUM OK"
-# else echo "MD5 SUM FAILED!!!" 
-#      exit 1
-# fi
+if [ "$SUM" == "$NEWSUM" ] && [ "$SUM" != "" ] 
+then echo "MD5 SUM OK"
+else echo "MD5 SUM FAILED!!!" 
+     exit 1
+fi
 
 # install kafka:
 
@@ -50,6 +50,7 @@ mv -f /${KAFKA_ARTIFACT}/* "$KAFKA_HOME"
 
 # chown $kafka_home
 chown -R "${KAFKA_USER}:${KAFKA_GROUP}" "$KAFKA_HOME"
+chown -R "${KAFKA_USER}:${KAFKA_GROUP}" /data
 
 # remove unecessary packages and files
 rm /tmp/opkg-lists/* 
