@@ -5,6 +5,8 @@ LABEL version="2.11-0.11.0.0"
 LABEL vendor="mcreations"
 LABEL name="docker-openwrt-kafka"
 
+ENV MD5SUM=c7929de0cd4a0c57bb8a0da0a4de06a7
+
 EXPOSE 9092
 
 ENV KAFKA_HOME /opt/kafka
