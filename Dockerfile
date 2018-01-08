@@ -1,11 +1,9 @@
 FROM mcreations/openwrt-java:8
 
 LABEL maintainer="Ioanna M. Dimitriou <dimitriou@m-creations.com>"
-LABEL version="2.11-0.11.0.0"
+LABEL version="2.11-1.0.0"
 LABEL vendor="mcreations"
 LABEL name="docker-openwrt-kafka"
-
-ENV MD5SUM=c7929de0cd4a0c57bb8a0da0a4de06a7
 
 EXPOSE 9092
 

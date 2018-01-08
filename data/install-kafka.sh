@@ -5,10 +5,12 @@ set -x
 
 # variables
 
-KAFKA_VERSION="2.11-0.11.0.0"
-KAFKA_ARTIFACT="kafka_${KAFKA_VERSION}"
+SCALA_VERSION="2.11"
+KAFKA_VERSION="1.0.0"
+KAFKA_ARTIFACT="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"
 KAFKA_FILE="${KAFKA_ARTIFACT}.tgz"
-KAFKA_DOWNLOAD_URL="http://mirror.23media.de/apache/kafka/0.11.0.0/${KAFKA_FILE}"
+KAFKA_DOWNLOAD_URL="http://mirror.23media.de/apache/kafka/${KAFKA_VERSION}/${KAFKA_FILE}"
+KAFKA_ASC_FILE="https://www.apache.org/dist/kafka/${KAFKA_VERSION}/${KAFKA_FILE}.asc"
 
 # get necessary openWRT packages
 opkg update
@@ -23,14 +25,11 @@ echo 'alias hostname="echo $HOSTNAME"' >> /etc/profile
 # download kafka
 wget -nv "${KAFKA_DOWNLOAD_URL}"
 
-# the md5 sum we calculate
-NEWSUM=`md5sum "${KAFKA_FILE}" | awk '{print $1}'`
+# download and get kafka's gpg signature
 
-if [ "$MD5SUM" == "$NEWSUM" ]
-then echo "MD5 SUM OK"
-else echo "MD5 SUM FAILED!!!"
-     exit 1
-fi
+wget -nv "${KAFKA_ASC_FILE}"
+
+# TODO: Install gpg and check signature of $KAFKA_FILE. 
 
 # install kafka:
 
