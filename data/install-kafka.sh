@@ -3,14 +3,12 @@
 # to toggle debugging comment/uncomment the following:
 set -x
 
-# variables
+# instalation specific variables
 
-SCALA_VERSION="2.11"
-KAFKA_VERSION="1.0.0"
 KAFKA_ARTIFACT="kafka_${SCALA_VERSION}-${KAFKA_VERSION}"
 KAFKA_FILE="${KAFKA_ARTIFACT}.tgz"
 KAFKA_DOWNLOAD_URL="http://mirror.23media.de/apache/kafka/${KAFKA_VERSION}/${KAFKA_FILE}"
-KAFKA_ASC_FILE="https://www.apache.org/dist/kafka/${KAFKA_VERSION}/${KAFKA_FILE}.asc"
+KAFKA_MD5_FILE="https://www.apache.org/dist/kafka/${KAFKA_VERSION}/${KAFKA_FILE}.md5"
 
 # get necessary openWRT packages
 opkg update
@@ -25,11 +23,28 @@ echo 'alias hostname="echo $HOSTNAME"' >> /etc/profile
 # download kafka
 wget -nv "${KAFKA_DOWNLOAD_URL}"
 
-# download and get kafka's gpg signature
+# download and get kafka's md5 signature
 
-wget -nv "${KAFKA_ASC_FILE}"
+wget -nv "${KAFKA_MD5_FILE}"
 
-# TODO: Install gpg and check signature of $KAFKA_FILE. 
+# check md5 sum  of $KAFKA_FILE. 
+
+# *******************************************
+# !!! MD5 SUM FAILS BECAUSE OF FORMATTING!!!!
+# *******************************************
+
+# the md5 sum according to Apache: 
+SUM=`cat "${KAFKA_FILE}.md5" | tr -d '\n' | awk '{ line = sprintf("%s", $0); gsub(/[[:space:]]/, "", line); split(line, parts, ":"); print tolower(parts[2]) }'`
+
+# the md5 sum we calculate
+NEWSUM=`md5sum "${KAFKA_FILE}" | awk '{print $1}'`
+
+if [ "$SUM" == "$NEWSUM" ] && [ "$SUM" != "" ] 
+then echo "MD5 SUM OK"
+else echo "MD5 SUM FAILED!!!" 
+     exit 1
+fi
+
 
 # install kafka:
 
