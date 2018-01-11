@@ -5,12 +5,14 @@ LABEL version="2.11-1.0.0"
 LABEL vendor="mcreations"
 LABEL name="docker-openwrt-kafka"
 
+ENV SCALA_VERSION="2.11"
+ENV KAFKA_VERSION="1.0.0"
+
 EXPOSE 9092
 
-ENV KAFKA_HOME /opt/kafka
+# non root user 
 
-# add user: 
-
+ENV KAFKA_HOME="/opt/kafka"
 ENV KAFKA_USER="kafka"
 ENV KAFKA_GROUP="$KAFKA_USER"
 
