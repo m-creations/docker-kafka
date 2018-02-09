@@ -16,6 +16,12 @@ ENV KAFKA_HOME="/opt/kafka"
 ENV KAFKA_USER="kafka"
 ENV KAFKA_GROUP="$KAFKA_USER"
 
+# If no values are set during docker run, then the defaults will be used (see /docker-entrypoint.sh)
+
+ENV KAFKA_CONFIG_FILE=""
+ENV ZOOKEEPER_CONFIG_FILE=""
+ENV ZOO="true"
+
 # installation scripts are here:
 
 RUN mkdir -p /data 
