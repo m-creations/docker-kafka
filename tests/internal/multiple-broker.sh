@@ -17,9 +17,8 @@ cd ${KAFKA_HOME}
 sed 's/broker.id=0/broker.id=1/1; s/#listeners/listeners/1; s/:9092/:9093/1; s/kafka-logs/kafka-logs-1/1' config/server.properties > config/server-1.properties
 sed 's/broker.id=0/broker.id=2/1; s/#listeners/listeners/1;  s/:9092/:9094/1; s/kafka-logs/kafka-logs-2/1' config/server.properties > config/server-2.properties
 
-
 ((bin/kafka-server-start.sh config/server-1.properties)&)&
-bin/kafka-server-start.sh config/server-2.properties &
+((bin/kafka-server-start.sh config/server-2.properties)&)&
 
 # wait until the servers are up
 
@@ -38,4 +37,4 @@ else echo "not ok"
      exit 1
 fi
 
-exit 2
+
