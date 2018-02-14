@@ -33,10 +33,4 @@ ADD data/ /data
 
 RUN bash /data/install-kafka.sh
 
-# start container with this script 
-
-ENTRYPOINT ["/docker-entrypoint.sh"]
-
-# with no arguments
- 
-CMD [ "" ]
+CMD [ "/start-kafka-default.sh" ]
