@@ -8,7 +8,7 @@
 # https://kafka.apache.org/documentation.html#quickstart
 # -------------------------------------------------------------------
 
-# set -x # uncomment for debugging
+set -x # uncomment for debugging
 
 # Expand the cluster to 3 nodes, by adding 2 more brokers.
 
@@ -18,7 +18,9 @@ sed 's/broker.id=0/broker.id=1/1; s/#listeners/listeners/1; s/:9092/:9093/1; s/k
 sed 's/broker.id=0/broker.id=2/1; s/#listeners/listeners/1;  s/:9092/:9094/1; s/kafka-logs/kafka-logs-2/1' config/server.properties > config/server-2.properties
 
 ((bin/kafka-server-start.sh config/server-1.properties)&)&
+PID_SERVER_1=$(echo $!)
 ((bin/kafka-server-start.sh config/server-2.properties)&)&
+PID_SERVER_2=$(echo $!)
 
 # wait until the servers are up
 
@@ -31,10 +33,12 @@ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 -
 TEST_STRING="$(bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic | sed -n 1p)"
 TEST_RESULT=$'Topic:my-replicated-topic\tPartitionCount:1\tReplicationFactor:3\tConfigs:'
 
+kill $PID_SERVER_1
+kill $PID_SERVER_2
+
 if [ "$TEST_STRING" = "$TEST_RESULT" ] 
 then echo "ok"
+     exit 0
 else echo "not ok"
      exit 1
 fi
-
-
