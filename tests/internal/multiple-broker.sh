@@ -33,12 +33,9 @@ bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 3 -
 TEST_STRING="$(bin/kafka-topics.sh --describe --zookeeper localhost:2181 --topic my-replicated-topic | sed -n 1p)"
 TEST_RESULT=$'Topic:my-replicated-topic\tPartitionCount:1\tReplicationFactor:3\tConfigs:'
 
-kill $PID_SERVER_1
-kill $PID_SERVER_2
-
-if [ "$TEST_STRING" = "$TEST_RESULT" ] 
-then echo "ok"
-     exit 0
-else echo "not ok"
+if [ "$TEST_STRING" != "$TEST_RESULT" ] 
+then echo "not ok"
      exit 1
 fi
+
+
