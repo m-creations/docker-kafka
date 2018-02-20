@@ -22,16 +22,12 @@ docker build . -t docker-openwrt-kafka:2.11-1.0.0
 
 ## Usage
 
-To run a Kafka server listening on port 9092 execute:
+To run a Kafka server listening on `localhost:9092` execute:
 
 ```
 docker run -p 9092:9092 docker-openwrt-kafka:2.11-1.0.0
 ```
 
-## Warning
+## Tests
 
-GPG Signature **not checked**. 
-
-# Test
-
-A test is under preparation. 
+In `./tests/` you can find some tests which are run after every commit by `travis-ci.org`, as described in `.travis.yml`.
