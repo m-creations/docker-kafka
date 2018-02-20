@@ -1,0 +1,14 @@
+sudo: required
+
+services:
+  - docker
+ 
+before_install:
+  - docker build . -t openwrt-kafka:1.0.0
+
+script:
+  - sh tests/test-single-broker.sh
+  - sh tests/test-multiple-brokers.sh
+
+
+   
